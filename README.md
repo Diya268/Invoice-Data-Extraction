@@ -27,7 +27,7 @@ A Python-based web application that extracts structured data from invoices (PDFs
 
 | Layer         | Technology              |
 |---------------|--------------------------|
-| Frontend      | HTML, CSS, JavaScript    |
+| Frontend      | Streamlit    |
 | Backend       | Python            |
 | AI Model      | YOLOv8 |
 | OCR           | Tesseract OCR            |
