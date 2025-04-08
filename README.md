@@ -28,19 +28,12 @@ A Python-based web application that extracts structured data from invoices (PDFs
 | Layer         | Technology              |
 |---------------|--------------------------|
 | Frontend      | HTML, CSS, JavaScript    |
-| Backend       | Python (Flask)           |
-| AI Model      | LayoutLMv3 (HuggingFace) |
+| Backend       | Python            |
+| AI Model      | YOLOv8 |
 | OCR           | Tesseract OCR            |
 | Database      | MySQL                    |
 | File Export   | JSON, Excel (XLSX)       |
 
----
-
-## 🖼️ Screenshots
-
-> _Add screenshots here if you'd like_  
-> You can upload them to your repo and embed like this:  
-> `![Screenshot](images/demo.png)`
 
 ---
 
