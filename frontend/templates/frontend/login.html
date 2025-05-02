@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | Invoice Extraction System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional: your CSS -->
+    <link rel="stylesheet" href="{% static 'frontend/styles.css' %}">
+    <style>
+        body {
+            background-color: #16e3c8fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .login-box {
+            background: rgb(0, 0, 0);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .logo img {
+            width: 80px;
+            margin-bottom: 10px;
+        }
+        .login-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #f1e8e8;
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+        }
+        .text-center small a {
+            text-decoration: none;
+        }
+        .text-center small a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-box">
+
+    <!-- Logo & Title-->
+    <div class="text-center logo">
+        <img src="{% static 'frontend/logo.png' %}" alt="Logo">
+        <div class="login-title">Invoice Extract System</div>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Login Form -->
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="mb-3">
+            <label for="id_username" class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" id="id_username" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_password" class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" id="id_password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+
+    <div class="text-center mt-3">
+        <small>Don't have an account? <a href="{% url 'user-register' %}">Register</a></small>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+/* Reset margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #0fe0c6;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Full container */
+.container {
+    display: flex;
+    max-width: 1200px;
+    width: 100%;
+    background-color: #111;
+    border-radius: 16px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+/* Left Pane (Upload & Preview) */
+.left-pane {
+    flex: 1;
+    background-color: #16e3c8fa;
+    color: white;
+    padding: 30px;
+    border-right: 2px solid #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Right Pane (Field selection, output) */
+.right-pane {
+    flex: 1;
+    background-color: #1e1e1e;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Centering and logo */
+.logo {
+    text-align: center;
+    margin-bottom: 15px;
+}
+.logo img {
+    width: 60px;
+}
+
+.title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #0fe8cf;
+}
+
+/* Upload Section */
+.upload-form {
+    text-align: center;
+}
+.upload-form input[type="file"] {
+    display: block;
+    margin: 0 auto 15px auto;
+}
+.upload-form button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.upload-form button:hover {
+    background-color: #43a047;
+}
+
+/* Field Selection */
+.field-box {
+    background-color: #262626;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #444;
+    margin-bottom: 20px;
+}
+.field-box strong {
+    display: block;
+    margin-bottom: 10px;
+}
+.field-box label {
+    display: inline-block;
+    margin: 5px 12px;
+    font-size: 16px;
+}
+
+/* Extract Button */
+.extract-btn {
+    background-color: #00c853;
+    color: white;
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
+}
+.extract-btn:hover {
+    background-color: #00a544;
+}
+
+/* Output Section */
+.output {
+    background-color: #002b36;
+    color: #00ffae;
+    font-family: monospace;
+    padding: 15px;
+    border-radius: 8px;
+    min-height: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 15px;
+}
+
+/* Buttons Below Output */
+.button-bar {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.button-bar button {
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 6px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-btn {
+    background-color: #1976d2;
+    color: white;
+}
+.save-btn:hover {
+    background-color: #1565c0;
+}
+
+.load-btn {
+    background-color: #7b1fa2;
+    color: white;
+}
+.load-btn:hover {
+    background-color: #4a148c;
+}
+
+/* Excel download button */
+a.save-btn {
+    display: inline-block;
+    margin-top: 15px;
+    text-decoration: none;
+    background-color: #4caf50;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    border-radius: 6px;
+}
+a.save-btn:hover {
+    background-color: #388e3c;
+}

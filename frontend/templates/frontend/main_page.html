@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InvoiceNet - Process Invoice</title>
+  <link rel="stylesheet" href="{% static 'frontend/styles.css' %}">
+
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Left Pane -->
+    <div class="left-pane">
+      <div class="upload-form">
+        {% if not uploaded_file_url %}
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="invoice_file" accept=".pdf,.jpg,.jpeg,.png" required>
+            <button type="submit">Upload & Process</button>
+          </form>
+        {% else %}
+          {% if uploaded_file_url|lower|slice:"-4:" == ".pdf" %}
+            <iframe src="{{ uploaded_file_url }}" width="100%" height="500px"></iframe>
+          {% else %}
+            <img src="{{ uploaded_file_url }}" alt="Uploaded Invoice" style="max-width:100%; max-height:500px;">
+          {% endif %}
+        {% endif %}
+
+        {% if extracted_json %}
+          <h3>Extracted Invoice Data:</h3>
+          <pre>{{ extracted_json }}</pre>
+
+          {% if excel_file_url %}
+            <a href="/{{ excel_file_url }}" download class="save-btn">Download Excel</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Right Pane -->
+    <div class="right-pane">
+    <!---  <div class="logo">
+        <img src="{% static 'frontend/logo.png' %}" alt="InvoiceNet Logo">
+      </div>-->
+
+      <div class="title">InvoiceNet</div>
+
+      <div class="field-box">
+        <strong>Select Fields to Extract:</strong>
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% if uploaded_file_url %}
+            <input type="hidden" name="uploaded_file" value="{{ uploaded_file_url }}">
+          {% endif %}
+
+          <label><input type="checkbox" name="fields" value="invoice_number" checked> Invoice Number</label>
+          <label><input type="checkbox" name="fields" value="invoice_date" checked> Invoice Date</label>
+          <label><input type="checkbox" name="fields" value="vendor_name" checked> Vendor Name</label>
+          <label><input type="checkbox" name="fields" value="net_amount" checked> Net Amount</label>
+          <label><input type="checkbox" name="fields" value="tax_amount"> Tax Amount</label>
+          <label><input type="checkbox" name="fields" value="total_amount" checked> Total Amount</label>
+
+          <button type="submit" class="extract-btn">Extract</button>
+        </form>
+      </div>
+
+      <div class="output">
+        <pre>
+          {% if extracted_json %}
+            {{ extracted_json }}
+          {% else %}
+            Extracted data will appear here...
+          {% endif %}
+        </pre>
+      </div>
+
+      <div class="button-bar">
+        <button type="button" class="save-btn">Save Information</button>
+        <button type="button" class="load-btn">Load Labels</button>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>  
