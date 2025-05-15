@@ -2,11 +2,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>InvoiceNet - Process Invoice</title>
-  <link rel="stylesheet" href="{% static 'frontend/styles.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #0fe8cf, #0fabc6);
+      min-height: 100vh;
+      padding: 30px;
+      color: #fff;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      background-color: #1e1e2f;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .left-pane, .right-pane {
+      flex: 1 1 50%;
+      padding: 30px;
+    }
+
+    .left-pane {
+      border-right: 1px solid #444;
+    }
+
+    .upload-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #2c2c3e;
+      padding: 40px;
+      border-radius: 10px;
+      border: 2px dashed #0fe8cf;
+      height: 100%;
+    }
+
+    .upload-form input[type="file"] {
+      display: block;
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 2px dashed #0fe8cf;
+      background-color: #2c2c3e;
+      color: #fff;
+      width: 70%;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .upload-form button {
+      padding: 10px 20px;
+      background-color: #0fe8cf;
+      border: none;
+      color: #111;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      width: 70%;
+    }
+
+    .upload-form button:hover {
+      background-color: #0ec0b2;
+    }
+
+    iframe, img {
+      width: 100%;
+      max-height: 500px;
+      margin-top: 20px;
+      border-radius: 10px;
+      border: 1px solid #444;
+    }
+
+    pre {
+      background-color: #12121c;
+      color: #0fe8cf;
+      padding: 15px;
+      border-radius: 10px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      margin-top: 15px;
+    }
+
+    h3 {
+      margin-top: 25px;
+      color: #0fe8cf;
+    }
+
+    .save-btn {
+      display: inline-block;
+      margin-top: 15px;
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 6px;
+    }
+
+    .save-btn:hover {
+      background-color: #43a047;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      color: #0fe8cf;
+    }
+
+    .field-box {
+      background-color: #2c2c3e;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #444;
+    }
+
+    .field-box strong {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .field-box label {
+      display: block;
+      margin: 8px 0;
+    }
+
+    .field-box input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
+    .output {
+      background-color: #12121c;
+      color: #0fe8cf;
+      padding: 15px;
+      border-radius: 10px;
+      min-height: 100px;
+      margin-top: 15px;
+      white-space: pre-wrap;
+    }
+
+    .button-bar {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .button-bar button {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .save-btn {
+      background-color: #1976d2;
+      color: white;
+    }
+
+    .save-btn:hover {
+      background-color: #1565c0;
+    }
+
+    .load-btn {
+      background-color: #9c27b0;
+      color: white;
+    }
+
+    .load-btn:hover {
+      background-color: #7b1fa2;
+    }
+
+    @media (max-width: 768px) {
+      .left-pane, .right-pane {
+        flex: 1 1 100%;
+        border-right: none;
+        border-bottom: 1px solid #444;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -15,17 +208,19 @@
     <!-- Left Pane -->
     <div class="left-pane">
       <div class="upload-form">
+        <!-- Display file upload form if no file is uploaded -->
         {% if not uploaded_file_url %}
           <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="file" name="invoice_file" accept=".pdf,.jpg,.jpeg,.png" required>
+            <input type="file" name="invoice_file" accept=".pdf,.jpg,.jpeg,.png" required onchange="showImagePreview(event)">
             <button type="submit">Upload & Process</button>
           </form>
         {% else %}
+          <!-- Show the uploaded file (image or PDF) -->
           {% if uploaded_file_url|lower|slice:"-4:" == ".pdf" %}
-            <iframe src="{{ uploaded_file_url }}" width="100%" height="500px"></iframe>
+            <iframe src="{{ uploaded_file_url }}"></iframe>
           {% else %}
-            <img src="{{ uploaded_file_url }}" alt="Uploaded Invoice" style="max-width:100%; max-height:500px;">
+            <img src="{{ uploaded_file_url }}" alt="Uploaded Invoice">
           {% endif %}
         {% endif %}
 
@@ -34,7 +229,7 @@
           <pre>{{ extracted_json }}</pre>
 
           {% if excel_file_url %}
-            <a href="/{{ excel_file_url }}" download class="save-btn">Download Excel</a>
+          <a href="{{ excel_file_url }}" download class="save-btn">Download Excel</a>
           {% endif %}
         {% endif %}
       </div>
@@ -42,10 +237,6 @@
 
     <!-- Right Pane -->
     <div class="right-pane">
-    <!---  <div class="logo">
-        <img src="{% static 'frontend/logo.png' %}" alt="InvoiceNet Logo">
-      </div>-->
-
       <div class="title">InvoiceNet</div>
 
       <div class="field-box">
@@ -56,33 +247,47 @@
             <input type="hidden" name="uploaded_file" value="{{ uploaded_file_url }}">
           {% endif %}
 
-          <label><input type="checkbox" name="fields" value="invoice_number" checked> Invoice Number</label>
+          <label><input type="checkbox" name="fields" value="invoice_id" checked> invoice_id</label>
           <label><input type="checkbox" name="fields" value="invoice_date" checked> Invoice Date</label>
-          <label><input type="checkbox" name="fields" value="vendor_name" checked> Vendor Name</label>
-          <label><input type="checkbox" name="fields" value="net_amount" checked> Net Amount</label>
-          <label><input type="checkbox" name="fields" value="tax_amount"> Tax Amount</label>
+          <label><input type="checkbox" name="fields" value="Billing_Address" checked> Billing_Address</label>
+          <label><input type="checkbox" name="fields" value="Billing_id" checked> Billing_id</label>
+          <label><input type="checkbox" name="fields" value="total_id" checked> total_id</label>
           <label><input type="checkbox" name="fields" value="total_amount" checked> Total Amount</label>
-
-          <button type="submit" class="extract-btn">Extract</button>
         </form>
       </div>
 
       <div class="output">
         <pre>
-          {% if extracted_json %}
-            {{ extracted_json }}
-          {% else %}
-            Extracted data will appear here...
-          {% endif %}
+        {% if extracted_json %}
+          {{ extracted_json }}
+        {% else %}
+          Extracted data will appear here...
+        {% endif %}
         </pre>
       </div>
 
-      <div class="button-bar">
+  <!----  <div class="button-bar">
         <button type="button" class="save-btn">Save Information</button>
         <button type="button" class="load-btn">Load Labels</button>
-      </div>
+      </div>-->  
     </div>
 
   </div>
+
+  <script>
+    function showImagePreview(event) {
+      const file = event.target.files[0];
+      if (file && file.type.startsWith('image')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const imgElement = document.createElement('img');
+          imgElement.src = e.target.result;
+          document.querySelector('.upload-form').appendChild(imgElement);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  </script>
+
 </body>
-</html>  
+</html>
