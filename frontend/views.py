@@ -17,9 +17,9 @@ model = YOLO(MODEL_PATH)
 
 # Class labels dictionary
 class_names = {
-    0: 'BA', 1: 'BAID', 2: 'INV', 3: 'INV_DATE', 4: 'INV_DATE_ID',
-    5: 'INV_ID', 6: 'ORD_DATE', 7: 'ORD_DATE_ID', 8: 'SA', 9: 'SAID',
-    10: 'SLR', 11: 'SLR_ID', 12: 'TOTAL', 13: 'TOTAL_ID', 14: 'CN'
+    0: 'BA', 1: 'BAID', 2: 'INV', 3: 'INV_DATE',
+    4: 'INV_ID', 5: 'ORD_DATE', 6: 'ORD_DATE_ID', 7: 'SA', 9: 'SAID',
+    8: 'TOTAL', 9: 'TOTAL_ID', 10: 'CN'
 }
 
 
@@ -66,12 +66,18 @@ def main_page(request):
         ctx['uploaded_file'] = fs.url(fname)
 
         # if success, write Excel into MEDIA_ROOT and expose link
-        if 'error' not in extracted:
-            df = pd.DataFrame([extracted])
-            out_name = 'Extracted_Invoice_Data.xlsx'
-            out_path = os.path.join(settings.MEDIA_ROOT, out_name)
-            df.to_excel(out_path, index=False)
-            ctx['excel_file_url'] = settings.MEDIA_URL + out_name
+        #if 'error' not in extracted:
+        #    df = pd.DataFrame([extracted])
+        #    out_name = 'Extracted_Invoice_Data.xlsx'
+        #    out_path = os.path.join(settings.MEDIA_ROOT, out_name)
+        #    df.to_excel(out_path, index=False)
+        #    ctx['excel_file_url'] = settings.MEDIA_URL + out_name
+
+
+        excel_path = os.path.join(settings.MEDIA_ROOT, "Extracted_Invoice_Data.xlsx")
+        excel_url = os.path.join(settings.MEDIA_URL, "Extracted_Invoice_Data.xlsx")  # this becomes '/media/Extracted_Invoice_Data.xlsx'
+
+        ctx["excel_file_url"] = excel_url
 
     return render(request, 'frontend/main_page.html', ctx)
 
@@ -132,3 +138,4 @@ def user_profile(request):
 def user_logout(request):
     logout(request)
     return redirect('user-login')
+
